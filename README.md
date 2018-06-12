@@ -79,4 +79,5 @@ state = todos.reduce(state, setCategoryToBirds()); // state === 'birds'
 
 ## Changelog
 v1.1.0 - added ability for multiple actions paired to one reducer
+v1.2.0 - added optional pass-through selector namespacing for use with combined reducers (docs to follow)
 
