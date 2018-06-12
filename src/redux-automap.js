@@ -1,6 +1,6 @@
 // automap(namespace, { actionReducers, initialState }) - returns individual mapped actions/reducers/etc
 export const automap = function(config = {}) {
-  const { namespace, actionReducers = [], initialState = {} } = config;
+  const { namespace, actionReducers = [], initialState = {}, selectors = {} } = config;
   const anyAction = key => key !== 'reducer' && key !== 'type';
 
   const actions = actionReducers.reduce((acc, item) => {
@@ -36,6 +36,16 @@ export const automap = function(config = {}) {
 
     return actionReducer && actionReducer(state, action) || state;
   };
+
+  // remap selectors to namespace
+  let namespacedSelectors = {}
+
+  for (let selectorKey in selectors) {
+    let selector = selectors[selectorKey];
+    namespacedSelectors[selectorKey] = state => selector(state.get(namespace));
+  }
+
+  selectors.namespaced = namespacedSelectors;
 
   return Object.assign({}, config, { namespace, actions, reducers, reducer });
 }

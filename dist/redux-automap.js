@@ -11,7 +11,9 @@ var automap = function automap() {
       _config$actionReducer = config.actionReducers,
       actionReducers = _config$actionReducer === undefined ? [] : _config$actionReducer,
       _config$initialState = config.initialState,
-      initialState = _config$initialState === undefined ? {} : _config$initialState;
+      initialState = _config$initialState === undefined ? {} : _config$initialState,
+      _config$selectors = config.selectors,
+      selectors = _config$selectors === undefined ? {} : _config$selectors;
 
   var anyAction = function anyAction(key) {
     return key !== 'reducer' && key !== 'type';
@@ -55,6 +57,22 @@ var automap = function automap() {
 
     return actionReducer && actionReducer(state, action) || state;
   };
+
+  // remap selectors to namespace
+  var namespacedSelectors = {};
+
+  var _loop = function _loop(selectorKey) {
+    var selector = selectors[selectorKey];
+    namespacedSelectors[selectorKey] = function (state) {
+      return selector(state.get(namespace));
+    };
+  };
+
+  for (var selectorKey in selectors) {
+    _loop(selectorKey);
+  }
+
+  selectors.namespaced = namespacedSelectors;
 
   return Object.assign({}, config, { namespace: namespace, actions: actions, reducers: reducers, reducer: reducer });
 };
