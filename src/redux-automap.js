@@ -42,6 +42,7 @@ export const automap = function(config = {}) {
 
   if (namespace) {
     for (let selectorKey in selectors) {
+      let selector = selectors[selectorKey]
       selectors[selectorKey] = state => selector(state.get ? state.get(namespace) : state[namespace])
     }
   }

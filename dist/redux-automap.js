@@ -59,10 +59,15 @@ var automap = function automap() {
   };
 
   if (namespace) {
-    for (var selectorKey in selectors) {
+    var _loop = function _loop(selectorKey) {
+      var selector = selectors[selectorKey];
       selectors[selectorKey] = function (state) {
         return selector(state.get ? state.get(namespace) : state[namespace]);
       };
+    };
+
+    for (var selectorKey in selectors) {
+      _loop(selectorKey);
     }
   }
 
