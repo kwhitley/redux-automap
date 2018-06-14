@@ -14,7 +14,7 @@ really isn't necessary if you define actions with matching reducers together.
 
 ## Usage
 ```js
-import { automap } from 'redux-automap';
+import { automap } from 'redux-automap'
 
 const todos = automap({
   initialState: [],
@@ -28,7 +28,7 @@ const todos = automap({
       reducer: state => []
     }
   ]
-});
+})
 
 /*
 
@@ -44,20 +44,20 @@ todos === {
 
 */
 
-const { addTodo, clearTodos } = todos.actions;
-const washClothesAction = addTodo('wash clothes'); // { type: 'ADD_TODO', text: 'wash clothes' }
-const foldClothesAction = addTodo('fold, clothes'); // { type: 'ADD_TODO', text: 'fold clothes' }
+const { addTodo, clearTodos } = todos.actions
+const washClothesAction = addTodo('wash clothes') // { type: 'ADD_TODO', text: 'wash clothes' }
+const foldClothesAction = addTodo('fold, clothes') // { type: 'ADD_TODO', text: 'fold clothes' }
 
 
-let state = [];
-state = todos.reduce(state, washClothesAction); // state === [ 'wash clothes' ]
-state = todos.reduce(state, foldClothesAction); // state === [ 'wash clothes', 'fold clothes' ]
-state = todos.reduce(state, clearTodos());      // state === [ ]
+let state = []
+state = todos.reduce(state, washClothesAction) // state === [ 'wash clothes' ]
+state = todos.reduce(state, foldClothesAction) // state === [ 'wash clothes', 'fold clothes' ]
+state = todos.reduce(state, clearTodos())      // state === [ ]
 ```
 
 #### Example (allows multiple actions routing through a shared reducer)
 ```js
-import { automap } from 'redux-automap';
+import { automap } from 'redux-automap'
 
 const category = automap({
   initialState: 'dogs',
@@ -68,16 +68,17 @@ const category = automap({
       reducer: (state, action) => action.category // both actions will use this shared reducer
     }
   ]
-});
+})
 
-const { setCategory, setCategoryToBirds } = todos.actions;
+const { setCategory, setCategoryToBirds } = todos.actions
 
-let state = 'dogs';
-state = todos.reduce(state, setCategory('cats'));  // state === 'cats'
-state = todos.reduce(state, setCategoryToBirds()); // state === 'birds'
+let state = 'dogs'
+state = todos.reduce(state, setCategory('cats'))  // state === 'cats'
+state = todos.reduce(state, setCategoryToBirds()) // state === 'birds'
 ```
 
 ## Changelog
 v1.1.0 - added ability for multiple actions paired to one reducer
 v1.2.0 - added optional pass-through selector namespacing for use with combined reducers (docs to follow)
+v1.3.0 - actions and selectors are now automatically mapped onto default return (convenience)
 

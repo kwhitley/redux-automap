@@ -58,23 +58,15 @@ var automap = function automap() {
     return actionReducer && actionReducer(state, action) || state;
   };
 
-  // remap selectors to namespace
-  var namespacedSelectors = {};
-
-  var _loop = function _loop(selectorKey) {
-    var selector = selectors[selectorKey];
-    namespacedSelectors[selectorKey] = function (state) {
-      return selector(state.get(namespace));
-    };
-  };
-
-  for (var selectorKey in selectors) {
-    _loop(selectorKey);
+  if (namespace) {
+    for (var selectorKey in selectors) {
+      selectors[selectorKey] = function (state) {
+        return selector(state.get ? state.get(namespace) : state[namespace]);
+      };
+    }
   }
 
-  selectors.namespaced = namespacedSelectors;
-
-  return Object.assign({}, config, { namespace: namespace, actions: actions, reducers: reducers, reducer: reducer });
+  return Object.assign(actions, selectors, config, { namespace: namespace, actions: actions, reducers: reducers, reducer: reducer });
 };
 
 // merge([ map1, map2, ... ]) - maps reducers to their namespace for easy inclusion into store
