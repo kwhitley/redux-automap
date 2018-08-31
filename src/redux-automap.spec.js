@@ -79,8 +79,13 @@ describe('automap({ namespace, actionReducers, initialState }): object', functio
     expect(todos.actions.addTodo('miffles')).to.eql({ type: 'ADD_TODO', text: 'miffles' })
   })
 
-  it('actions creators may be registered without a reducer (not sure why)', function() {
-    expect(todos.actions.missing()).to.eql({ type: 'MISSING' })
+  it('actions creators may be registered without a reducer (e.g. for use with side effects)', function() {
+    let state = 'test'
+    let missingAction = todos.actions.missing()
+    let newState = todos.reducer(state, missingAction)
+
+    expect(missingAction).to.eql({ type: 'MISSING' })
+    expect(state).to.equal(newState)
   })
 
   it('may register multiple action creators to a single reducer', function() {
